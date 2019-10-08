@@ -15,7 +15,8 @@ bool l_on = true;
 
 void setup() {
   motor_shield.begin();
-  right_motor->setSpeed(50);
+  right_motor->setSpeed(26);
+  left_motor->setSpeed(30);
   Serial.begin(9600);
 }
 
@@ -39,18 +40,18 @@ void loop() {
 
   if (l_on and r_on) {
     Serial.println("go straight");
-    right_motor->run(FORWARD);
-    left_motor->run(FORWARD);
+    right_motor->run(BACKWARD);
+    left_motor->run(BACKWARD);
   }
   if (l_on and !r_on) {
     Serial.println("go right");
-    right_motor->run(FORWARD);
+    right_motor->run(BACKWARD);
     left_motor->run(RELEASE);
   }
   if (!l_on) {
     Serial.println("go left");
     right_motor->run(RELEASE);
-    left_motor->run(FORWARD);
+    left_motor->run(BACKWARD);
   }
 
 }
