@@ -1,6 +1,6 @@
 int incomingByte = 0; // for incoming serial data
 int value = 0;
-char charInput = "";
+int charInput = 0;
 
 void setup() {
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
@@ -21,9 +21,10 @@ void loop() {
     // say what you got:
     Serial.print("I received: ");
     Serial.println(value);
-    charInput = charInput + char(value);
-    Serial.println(charInput);
+    charInput = 10*charInput + value;
     
   }
   }
+  Serial.println(charInput);
+  charInput = 0; 
 }
