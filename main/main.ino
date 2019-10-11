@@ -25,8 +25,8 @@ void loop() {
    // send data only when you receive data:
   if (Serial.available() > 0) {
     // read the incoming byte:
-    while (true) {
-    input = 0; 
+    input = 0;
+    while (true) { 
     incomingByte = Serial.read();
     value = incomingByte -48;
     
@@ -36,10 +36,11 @@ void loop() {
 
     input = 10*input + value;
     Serial.println(input);
-    right_motor->setSpeed(input*0.87);
+    right_motor->setSpeed(input*0.8);
     left_motor->setSpeed(input);
   }
   }
+  Serial.println(input);
   sensor_r_value = analogRead(sensor_r_pin);
   sensor_l_value = analogRead(sensor_l_pin);
   Serial.print("r sensor: ");
