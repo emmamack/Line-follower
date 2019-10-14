@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
-Adafruit_MotorShield motor_shield = Adafruit_MotorShield(); 
+Adafruit_MotorShield motor_shield = Adafruit_MotorShield();
 Adafruit_DCMotor *right_motor = motor_shield.getMotor(3);
 Adafruit_DCMotor *left_motor = motor_shield.getMotor(4);
 
@@ -26,28 +26,24 @@ void loop() {
   if (Serial.available() > 0) {
     // read the incoming byte:
     input = 0;
-    while (true) { 
+    while (true) {
     incomingByte = Serial.read();
     value = incomingByte -48;
-    
+
     if (value==-38){
       break;
     }
 
     input = 10*input + value;
-    //Serial.println(input);
     right_motor->setSpeed(input*0.8);
     left_motor->setSpeed(input);
   }
   }
-  //Serial.println(input);
+
   sensor_r_value = analogRead(sensor_r_pin);
   sensor_l_value = analogRead(sensor_l_pin);
-  //Serial.print("r sensor: ");
-  Serial.print(sensor_r_value);
-  Serial.print(",");
-  Serial.print(sensor_l_value);
-  Serial.print(",");
+
+  //set cutoff between blue and black at 700
   if (sensor_r_value < 700) {
     r_on = true;
   } else {
@@ -59,23 +55,27 @@ void loop() {
     l_on = false;
   }
 
+  //case where both sensors are on floor, robot goes forwards
   if (l_on and r_on) {
-    Serial.println("24,30");
     right_motor->run(BACKWARD);
     left_motor->run(BACKWARD);
   }
+
+  //case where left motor is on line, robot turns left
   if (!l_on and r_on) {
-    Serial.println("24,0");
     right_motor->run(BACKWARD);
     left_motor->run(RELEASE);
   }
+
+  //case where right motor is on line, robot turns right
   if (l_on and !r_on) {
-    Serial.println("0,30");
     right_motor->run(RELEASE);
     left_motor->run(BACKWARD);
   }
+
+  //case where both sensors are on line. This means something has gone very wrong,
+  //so the robot halts.
    if (!l_on and !r_on) {
-    Serial.println("0,30");
     right_motor->run(RELEASE);
     left_motor->run(RELEASE);
   }
